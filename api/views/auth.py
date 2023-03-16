@@ -10,4 +10,12 @@ class Register(APIView):
         user = AuthenticationController().register(data=request.data)
         return ResponseHandler(status=user['status'], message=user['message'], data=user['data']).api_response()
     
+class Login(APIView):
+    def post(self, request):
+        """
+        Handle user login
+        """
+        user = AuthenticationController().login(data=request.data)
+        return ResponseHandler(status=user['status'], message=user['message'], data=user['data']).api_response()
+    
 

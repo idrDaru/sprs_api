@@ -27,6 +27,23 @@ class UserController():
         
         return ResponseHandler(status=status.HTTP_404_NOT_FOUND, message="User Not Found").json_response()
     
+    def get_user_reverse(self, user_id):
+        try:
+            parking_user = ParkingUser.objects.get(user_id=user_id)
+            serializer = ParkingUserSerializer(parking_user)
+            return ResponseHandler(status=status.HTTP_200_OK, message="sucess", data=serializer.data).json_response()
+        except ParkingUser.DoesNotExist:
+            pass
+
+        try:
+            parking_provider = ParkingProvider.objects.get(user_id=user_id)
+            serializer = ParkingProviderSerializer(parking_provider)
+            return ResponseHandler(status=status.HTTP_200_OK, message="success", data=serializer.data).json_response()
+        except ParkingProvider.DoesNotExist:
+            pass
+        
+        return ResponseHandler(status=status.HTTP_404_NOT_FOUND, message="User Not Found").json_response()
+    
     def store_user(self, data):
         serializer = UserSerializer(data=data)
         if serializer.is_valid():
