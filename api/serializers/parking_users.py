@@ -22,4 +22,9 @@ class ParkingUserSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = ParkingUser
-        fields = ('id', 'first_name', 'last_name', 'user')
+        fields = (
+            'id', 
+            'first_name', 
+            'last_name', 
+            'user',
+        )

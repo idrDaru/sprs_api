@@ -50,7 +50,7 @@ class AuthenticationController():
         token = self.__create_token__(data=payload)
 
         return_data = {
-            "access_token": token,
+            'access_token': token,
         }
 
         return ResponseHandler(status=status.HTTP_200_OK, message="success", data=return_data).json_response()

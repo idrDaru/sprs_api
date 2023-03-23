@@ -1,5 +1,5 @@
 from rest_framework import permissions
-from api.contollers.auth_controllers import AuthenticationController
+from api.contollers.auth_controller import AuthenticationController
 import jwt
 
 class IsParkingProvider(permissions.BasePermission):

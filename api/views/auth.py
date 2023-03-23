@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from api.contollers.auth_controllers import AuthenticationController
+from api.contollers.auth_controller import AuthenticationController
 from api.handlers.response_handler import ResponseHandler
 
 class Register(APIView):

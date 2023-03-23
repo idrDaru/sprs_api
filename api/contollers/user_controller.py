@@ -1,7 +1,5 @@
-from django.http.request import QueryDict
 from rest_framework import status
 from api.handlers.response_handler import ResponseHandler
-from api.models.users import User
 from api.models.parking_users import ParkingUser
 from api.models.parking_providers import ParkingProvider
 from api.serializers.users import UserSerializer
@@ -43,7 +41,7 @@ class UserController():
             pass
         
         return ResponseHandler(status=status.HTTP_404_NOT_FOUND, message="User Not Found").json_response()
-    
+        
     def store_user(self, data):
         serializer = UserSerializer(data=data)
         if serializer.is_valid():
@@ -53,12 +51,12 @@ class UserController():
             if data.get("type", None) is not None:
                 # Call function to store parking parking provider data
                 store_parking_provider = self.__store_parking_provider(data=data, user=serializer.data)
-                if store_parking_provider['status'] is not 201:
+                if store_parking_provider['status'] != 201:
                     instance.delete()
                 return ResponseHandler(status=store_parking_provider['status'], message=store_parking_provider['message'], data=store_parking_provider['data']).json_response()
             # Call function to store parking user data
             store_parking_user = self.__store_parking_user(data=data, user=serializer.data)
-            if store_parking_user['status'] is not 201:
+            if store_parking_user['status'] != 201:
                 instance.delete()
             return ResponseHandler(status=store_parking_user['status'], message=store_parking_user['message'], data=store_parking_user['data']).json_response()
             
@@ -70,8 +68,8 @@ class UserController():
         serializer = ParkingUserSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            return ResponseHandler(status=status.HTTP_201_CREATED, message="success", data=serializer.data).json_response()
-        return ResponseHandler(status=status.HTTP_400_BAD_REQUEST, message=serializer.errors, data=serializer.data).json_response()
+            return ResponseHandler(status=status.HTTP_201_CREATED, message="success").json_response()
+        return ResponseHandler(status=status.HTTP_400_BAD_REQUEST, message=serializer.errors).json_response()
 
     def __store_parking_provider(self, data, user):
         data._mutable = True
@@ -80,4 +78,4 @@ class UserController():
         if serializer.is_valid():
             serializer.save()
             return ResponseHandler(status=status.HTTP_201_CREATED, message="success").json_response()
-        return ResponseHandler(status=status.HTTP_400_BAD_REQUEST, message=serializer.errors, data=serializer.data).json_response()
+        return ResponseHandler(status=status.HTTP_400_BAD_REQUEST, message=serializer.errors).json_response()
