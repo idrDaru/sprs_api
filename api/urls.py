@@ -14,10 +14,14 @@ urlpatterns = [
     # Booking URL
     path('api/create-booking/<str:pk>', CreateBooking.as_view()),
     path('api/user-booking/', UserBooking.as_view()),
+    path('api/booking/<str:pk>', BookingDetail.as_view()),
 
     # User URL
     path('api/user/', UserDetail.as_view()),
 
     # Payment URL
     path('api/payment-method/', PaymentMethod.as_view()),
+
+    # Parking Location URL
+    path('api/parking-locations/', ParkingLocationList.as_view())
 ]

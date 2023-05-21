@@ -34,17 +34,9 @@ class ParkingSpaceRelatedField(serializers.RelatedField):
             )
 
 class BookingSerializer(serializers.ModelSerializer):
-    user = ParkingUserRelatedField(queryset=ParkingUser.objects.all())
-    parking_space = ParkingSpaceRelatedField(queryset=ParkingSpace.objects.all())
+    user = ParkingUserRelatedField(queryset=ParkingUser.objects.all(), many=False, required=False)
+    parking_space = ParkingSpaceRelatedField(queryset=ParkingSpace.objects.all(), many=False, required=False)
     
     class Meta:
         model = Booking
-        fields = (
-            'id',
-            'user',
-            'parking_space',
-            'is_purchased',
-            'date',
-            'time_from',
-            'time_to',
-        )
+        fields = '__all__'

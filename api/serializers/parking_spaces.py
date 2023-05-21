@@ -22,16 +22,16 @@ class ParkingSpaceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ParkingSpace
-        fields = (
-            'id',
-            'address_line_one',
-            'address_line_two',
-            'city',
-            'state_province',
-            'country',
-            'postal_code',
-            'parking_space_number',
-            'image_file_name',
-            'image_file_path',
-            'provider',
-        )
+        fields = '__all__'
+        # fields = (
+        #     'id',
+        #     'address_line_one',
+        #     'address_line_two',
+        #     'city',
+        #     'state_province',
+        #     'country',
+        #     'postal_code',
+        #     'parking_space_number',
+        #     'image_download_url',
+        #     'provider',
+        # )

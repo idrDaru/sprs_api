@@ -22,10 +22,11 @@ class ParkingLocationSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = ParkingLocation
-        fields = (
-            'id',
-            'parking_space',
-            'location_path',
-            'latitude',
-            'longitude',
-        )
+        fields = '__all__'
+        # fields = (
+        #     'id',
+        #     'parking_space',
+        #     'location_path',
+        #     'latitude',
+        #     'longitude',
+        # )

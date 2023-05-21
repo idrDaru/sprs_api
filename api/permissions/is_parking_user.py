@@ -1,5 +1,5 @@
 from rest_framework import permissions
-from api.contollers.auth_controller import AuthenticationController
+from api.auth import Auth
 import jwt
 
 class IsParkingUser(permissions.BasePermission):
@@ -10,7 +10,7 @@ class IsParkingUser(permissions.BasePermission):
             return False
         
         try:
-            payload = AuthenticationController().extract_token(auth.split("Bearer ")[1])
+            payload = Auth().extract_token(auth.split("Bearer ")[1])
             if payload['type'] is not 1:
                 return False
         except jwt.ExpiredSignatureError:

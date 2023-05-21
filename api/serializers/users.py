@@ -4,15 +4,12 @@ from api.models.users import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = (
-            'id',
-            'email',
-            'password',
-            'is_verified',
-            'profile_file_name',
-            'profile_file_path',
-            'type',
-            'created_at',
-            'updated_at',
-            'deleted_at',
-        )
+        fields = '__all__'
+
+        extra_kwargs = {
+            'email': {"required": False, "allow_null": True},
+            'password': {"required": False, "allow_null": True},
+            'is_verified': {"required": False, "allow_null": True},
+            'image_download_url': {"required": False, "allow_null": True},
+            'type': {"required": False, "allow_null": True},
+        }

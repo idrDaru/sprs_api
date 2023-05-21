@@ -1,5 +1,5 @@
 from rest_framework import permissions
-from api.contollers.auth_controller import AuthenticationController
+from api.auth import Auth
 import jwt
 
 
@@ -11,7 +11,7 @@ class IsAuthenticated(permissions.BasePermission):
             return False
         
         try:
-            AuthenticationController().extract_token(auth.split("Bearer ")[1])
+            Auth().extract_token(auth.split("Bearer ")[1])
         except jwt.ExpiredSignatureError:
             return False
         except jwt.InvalidSignatureError:

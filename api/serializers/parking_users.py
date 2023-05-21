@@ -18,13 +18,15 @@ class UserRelatedField(serializers.RelatedField):
             )
 
 class ParkingUserSerializer(serializers.ModelSerializer): 
-    user = UserRelatedField(queryset=User.objects.all(), many=False)
+    user = UserRelatedField(queryset=User.objects.all(), many=False, required=False)
     
     class Meta:
         model = ParkingUser
-        fields = (
-            'id', 
-            'first_name', 
-            'last_name', 
-            'user',
-        )
+        fields = '__all__'
+
+        extra_kwargs = {
+            'first_name': {"required": False, "allow_null": True},
+            'last_name': {"required": False, "allow_null": True},
+        }
+    
+    

@@ -11,6 +11,5 @@ class Booking(models.Model):
     user = models.ForeignKey(ParkingUser, on_delete=models.CASCADE)
     parking_space = models.ForeignKey(ParkingSpace, on_delete=models.CASCADE)
     is_purchased = models.BooleanField(default=False)
-    date = models.DateField()
-    time_from = models.TimeField()
-    time_to = models.TimeField()
+    time_from = models.DateTimeField()
+    time_to = models.DateTimeField()
