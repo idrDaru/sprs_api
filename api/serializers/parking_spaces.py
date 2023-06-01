@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from api.models.parking_spaces import ParkingSpace
 from api.models.parking_providers import ParkingProvider
+from api.serializers.parking_locations import ParkingLocationSerializer
+from api.serializers.parking_layouts import ParkingLayoutSerializer
 from api.serializers.parking_providers import ParkingProviderSerializer
 
 class ParkingProviderRelatedField(serializers.RelatedField):
@@ -19,19 +21,9 @@ class ParkingProviderRelatedField(serializers.RelatedField):
 
 class ParkingSpaceSerializer(serializers.ModelSerializer):
     provider = ParkingProviderRelatedField(queryset=ParkingProvider.objects.all())
+    parkinglayout_set = ParkingLayoutSerializer(many=True)
+    parkinglocation_set = ParkingLocationSerializer(many=True)
 
     class Meta:
         model = ParkingSpace
         fields = '__all__'
-        # fields = (
-        #     'id',
-        #     'address_line_one',
-        #     'address_line_two',
-        #     'city',
-        #     'state_province',
-        #     'country',
-        #     'postal_code',
-        #     'parking_space_number',
-        #     'image_download_url',
-        #     'provider',
-        # )

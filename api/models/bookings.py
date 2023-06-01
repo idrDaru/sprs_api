@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 from api.models.parking_users import ParkingUser
 from api.models.parking_spaces import ParkingSpace
 import uuid
@@ -13,3 +14,7 @@ class Booking(models.Model):
     is_purchased = models.BooleanField(default=False)
     time_from = models.DateTimeField()
     time_to = models.DateTimeField()
+    total_car = models.IntegerField(null=True)
+    total_motorcycle = models.IntegerField(null=True)
+    total_price = models.FloatField()
+    parking_spot = ArrayField(models.UUIDField())

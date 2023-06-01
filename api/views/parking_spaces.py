@@ -31,8 +31,9 @@ class ParkingSpaceProvider(APIView):
     """
     def get(self, request):
         parking_provider_id = Auth().extract_token(token=request.headers.get('Authorization').split("Bearer ")[1])['id']
-        parking_space = ParkingSpace.objects.filter(provider_id=parking_provider_id).values()
-        return ResponseHandler(status=status.HTTP_200_OK, message="success", data=parking_space).api_response()
+        parking_space = ParkingSpace.objects.filter(provider_id=parking_provider_id)
+        serializer = ParkingSpaceSerializer(parking_space, many=True)
+        return ResponseHandler(status=status.HTTP_200_OK, message="success", data=serializer.data).api_response()
     
     def post(self, request):
         parking_space = ParkingSpaceController().store_parking_space(request=request)

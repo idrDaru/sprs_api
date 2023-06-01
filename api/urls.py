@@ -12,7 +12,7 @@ urlpatterns = [
     path('api/parking-space-provider/', ParkingSpaceProvider.as_view()),
 
     # Booking URL
-    path('api/create-booking/<str:pk>', CreateBooking.as_view()),
+    path('api/create-booking/', CreateBooking.as_view()),
     path('api/user-booking/', UserBooking.as_view()),
     path('api/booking/<str:pk>', BookingDetail.as_view()),
 

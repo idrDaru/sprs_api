@@ -10,4 +10,6 @@ class ParkingLayout(models.Model):
     parking_space = models.ForeignKey(ParkingSpace, on_delete=models.CASCADE)
     car_spot_number = models.IntegerField(null=True)
     motorcycle_spot_number = models.IntegerField(null=True)
+    car_price = models.FloatField()
+    motorcycle_price = models.FloatField()
     position = models.CharField(max_length=255)

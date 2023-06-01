@@ -12,4 +12,3 @@ class ParkingSpot(models.Model):
     type = models.IntegerField()
     status = models.BooleanField()
     position = models.CharField(max_length=255)
-    price = models.FloatField()
