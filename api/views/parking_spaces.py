@@ -11,10 +11,20 @@ class ParkingSpaceDetail(APIView):
     Retrive, update, or delete a parking space based on id
     """
     def get(self, request, pk):
-        # Get a parking space based on id
         parking_space = ParkingSpace.objects.get(id=pk)
         serializer = ParkingSpaceSerializer(parking_space)
         return ResponseHandler(status=status.HTTP_200_OK, message='success', data=serializer.data).api_response()
+    
+    def put(self, request, pk):
+        """
+        UPDATE parking space
+        """
+        parking_space = ParkingSpace.objects.get(pk=pk)
+        serializer = ParkingSpaceSerializer(parking_space, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return ResponseHandler(status=status.HTTP_200_OK, message='success').api_response()
+        return ResponseHandler(status=status.HTTP_400_BAD_REQUEST, message=serializer.errors, data=request.data).api_response()
     
 class ParkingSpaceList(APIView):
     """

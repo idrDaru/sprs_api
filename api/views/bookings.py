@@ -46,5 +46,35 @@ class BookingDetail(APIView):
         booking = Booking.objects.get(pk=pk)
         serializer = BookingSerializer(booking)
         return ResponseHandler(status=status.HTTP_200_OK, message='success', data=serializer.data).api_response()
+    def put(self, request, pk):
+        """
+        UPDATE booking
+        """
+        booking = Booking.objects.get(pk=pk)
+        serializer = BookingSerializer(booking, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return ResponseHandler(status=status.HTTP_200_OK, message='success').api_response()
+        return ResponseHandler(status=status.HTTP_400_BAD_REQUEST, message=serializer.errors, data=request.data).api_response()
+    def delete(self, request, pk):
+        """
+        DELETE a booking
+        """
+        booking = Booking.objects.get(pk=pk)
+        booking.delete()
+        return ResponseHandler(status=status.HTTP_200_OK, message='success').api_response()
+
+    
+class PayBooking(APIView):
+    def put(self, request, pk):
+        """
+        UPDATE payment status of a booking
+        """
+        booking = Booking.objects.get(pk=pk)
+        serializer = BookingSerializer(booking, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return ResponseHandler(status=status.HTTP_200_OK, message='success').api_response()
+        return ResponseHandler(status=status.HTTP_400_BAD_REQUEST, message=serializer.errors, data=request.data).api_response()
 
     

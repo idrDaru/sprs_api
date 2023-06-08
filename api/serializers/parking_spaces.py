@@ -20,10 +20,22 @@ class ParkingProviderRelatedField(serializers.RelatedField):
             )
 
 class ParkingSpaceSerializer(serializers.ModelSerializer):
-    provider = ParkingProviderRelatedField(queryset=ParkingProvider.objects.all())
-    parkinglayout_set = ParkingLayoutSerializer(many=True)
-    parkinglocation_set = ParkingLocationSerializer(many=True)
+    provider = ParkingProviderRelatedField(queryset=ParkingProvider.objects.all(), required=False)
+    parkinglayout_set = ParkingLayoutSerializer(many=True, required=False)
+    parkinglocation_set = ParkingLocationSerializer(many=True, required=False)
 
     class Meta:
         model = ParkingSpace
         fields = '__all__'
+        extra_kwargs = {
+            'name': {"required": False, "allow_null": True},
+            'address_line_one': {"required": False, "allow_null": True},
+            'address_line_two': {"required": False, "allow_null": True},
+            'city': {"required": False, "allow_null": True},
+            'state_province': {"required": False, "allow_null": True},
+            'country': {"required": False, "allow_null": True},
+            'postal_code': {"required": False, "allow_null": True},
+            'parking_space_number': {"required": False, "allow_null": True},
+            'image_download_url': {"required": False, "allow_null": True},
+            'is_active': {"required": False, "allow_null": True},
+        }
