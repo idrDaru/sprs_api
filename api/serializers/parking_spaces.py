@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from api.models.parking_spaces import ParkingSpace
 from api.models.parking_providers import ParkingProvider
+from api.models.parking_layouts import ParkingLayout
+from api.models.parking_locations import ParkingLocation
 from api.serializers.parking_locations import ParkingLocationSerializer
 from api.serializers.parking_layouts import ParkingLayoutSerializer
 from api.serializers.parking_providers import ParkingProviderSerializer
@@ -18,11 +20,39 @@ class ParkingProviderRelatedField(serializers.RelatedField):
             raise serializers.ValidationError(
                 'User Not Found'
             )
+        
+class ParkingLayoutRelatedField(serializers.RelatedField):
+    def to_representation(self, value):
+        serializer = ParkingLayoutSerializer(value)
+        return serializer.data
+    
+    def to_internal_value(self, data):
+        try:
+            parking_layout = ParkingLayout.objects.get(id=data['id'])
+            return parking_layout
+        except ParkingLayout.DoesNotExist:
+            raise serializers.ValidationError(
+                'Parking Layout Not Found'
+            )
+
+class ParkingLocationRelatedField(serializers.RelatedField):
+    def to_representation(self, value):
+        serializer = ParkingLocationSerializer(value)
+        return serializer.data
+    
+    def to_internal_value(self, data):
+        try:
+            parking_location = ParkingLocation.objects.get(id=data['id'])
+            return parking_location
+        except ParkingLocation.DoesNotExist:
+            raise serializers.ValidationError(
+                'Parking Location Not Found'
+            )
 
 class ParkingSpaceSerializer(serializers.ModelSerializer):
     provider = ParkingProviderRelatedField(queryset=ParkingProvider.objects.all(), required=False)
-    parkinglayout_set = ParkingLayoutSerializer(many=True, required=False)
-    parkinglocation_set = ParkingLocationSerializer(many=True, required=False)
+    parkinglayout_set = ParkingLayoutRelatedField(queryset=ParkingLayout.objects.all(), many=True, required=False)
+    parkinglocation_set = ParkingLocationRelatedField(queryset=ParkingLocation.objects.all(), many=True, required=False)
 
     class Meta:
         model = ParkingSpace

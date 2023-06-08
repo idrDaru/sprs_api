@@ -1,9 +1,12 @@
 from rest_framework.views import APIView
 from rest_framework import status
-from api.contollers.parking_space_controller import ParkingSpaceController
+from api.contollers.user_controller import UserController
 from api.handlers.response_handler import ResponseHandler
 from api.models.parking_spaces import ParkingSpace
 from api.serializers.parking_spaces import ParkingSpaceSerializer
+from api.serializers.parking_layouts import ParkingLayoutSerializer
+from api.serializers.parking_locations import ParkingLocationSerializer
+from api.serializers.parking_spots import ParkingSpotSerializer
 from api.auth import Auth
     
 class ParkingSpaceDetail(APIView):
@@ -46,6 +49,30 @@ class ParkingSpaceProvider(APIView):
         return ResponseHandler(status=status.HTTP_200_OK, message="success", data=serializer.data).api_response()
     
     def post(self, request):
-        parking_space = ParkingSpaceController().store_parking_space(request=request)
-        return ResponseHandler(status=parking_space['status'], message=parking_space['message'], data=parking_space['data']).api_response()
+        parking_provider_id = Auth().extract_token(token=request.headers.get('Authorization').split("Bearer ")[1])['id']
+        provider = UserController().get_user(id=parking_provider_id)
+        request.data['provider'] = provider['data']
+        serializer = ParkingSpaceSerializer(data=request.data)
+        if serializer.is_valid():
+            instance = serializer.save()
+            
+            request.data['parking_space'] = serializer.data['id']
+
+            parking_layout_serializer = ParkingLayoutSerializer(data=request.data)
+            parking_location_serializer = ParkingLocationSerializer(data=request.data)
+
+            if ((parking_layout_serializer.is_valid()) and (parking_location_serializer.is_valid())):
+                parking_location_serializer.save()
+                parking_layout_serializer.save()
+                for value in request.data['parking_spot']:
+                    value['layout'] = parking_layout_serializer.data['id']
+                    parking_spot_serializer = ParkingSpotSerializer(data=value)
+                    if parking_spot_serializer.is_valid():
+                        parking_spot_serializer.save()
+                    
+                return ResponseHandler(status=status.HTTP_201_CREATED, message='success').api_response()
+            
+            instance.delete()
+            return ResponseHandler(status=status.HTTP_400_BAD_REQUEST, message='errors').api_response()
+        return ResponseHandler(status=status.HTTP_400_BAD_REQUEST, message=serializer.errors).api_response()
     

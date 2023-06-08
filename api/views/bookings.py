@@ -2,9 +2,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from api.auth import Auth
 from api.handlers.response_handler import ResponseHandler
-from api.contollers.booking_controller import BookingController
 from api.contollers.user_controller import UserController
-from api.contollers.parking_space_controller import ParkingSpaceController
 from api.models.bookings import Booking
 from api.models.parking_spaces import ParkingSpace
 from api.serializers.bookings import BookingSerializer
@@ -24,7 +22,6 @@ class CreateBooking(APIView):
         serializer = BookingSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            print(serializer.data)
             return ResponseHandler(status=status.HTTP_201_CREATED, message='success').api_response()
         return ResponseHandler(status=status.HTTP_400_BAD_REQUEST, message=serializer.errors, data=serializer.data).api_response()
     

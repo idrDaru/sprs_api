@@ -8,7 +8,6 @@ from api.serializers.users import UserSerializer
 from api.serializers.parking_users import ParkingUserSerializer
 from api.serializers.parking_providers import ParkingProviderSerializer
 from rest_framework import status
-from api.auth import Auth
 
 class Register(APIView):
     def post(self, request):

@@ -30,7 +30,6 @@ class UserDetail(APIView):
         try:
             parking_provider = ParkingProvider.objects.get(id=user_id)
             serializer = ParkingProviderSerializer(parking_provider)
-            print(serializer.data)
             return ResponseHandler(status=status.HTTP_200_OK, message="success", data=serializer.data).api_response()
         except ParkingProvider.DoesNotExist:
             pass
