@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from api.models.parking_spots import ParkingSpot
 
+
 class ParkingSpotSerializer(serializers.ModelSerializer):
     class Meta:
         model = ParkingSpot
@@ -11,4 +12,5 @@ class ParkingSpotSerializer(serializers.ModelSerializer):
             'type': {"required": False, "allow_null": True},
             'status': {"required": False, "allow_null": True},
             'position': {"required": False, "allow_null": True},
+            'layout': {"required": False, "allow_null": True},
         }

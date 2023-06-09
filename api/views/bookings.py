@@ -4,8 +4,10 @@ from api.auth import Auth
 from api.handlers.response_handler import ResponseHandler
 from api.contollers.user_controller import UserController
 from api.models.bookings import Booking
+from api.models.parking_spots import ParkingSpot
 from api.models.parking_spaces import ParkingSpace
 from api.serializers.bookings import BookingSerializer
+from api.serializers.parking_spots import ParkingSpotSerializer
 from api.serializers.parking_spaces import ParkingSpaceSerializer
 
 class CreateBooking(APIView):
@@ -22,6 +24,11 @@ class CreateBooking(APIView):
         serializer = BookingSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            for value in request.data['parking_spot']:
+                parking_spot  = ParkingSpot.objects.get(pk=value)
+                parking_spot_serializer = ParkingSpotSerializer(parking_spot, data={'status': False})
+                if parking_spot_serializer.is_valid():
+                    parking_spot_serializer.save()
             return ResponseHandler(status=status.HTTP_201_CREATED, message='success').api_response()
         return ResponseHandler(status=status.HTTP_400_BAD_REQUEST, message=serializer.errors, data=serializer.data).api_response()
     
@@ -58,6 +65,12 @@ class BookingDetail(APIView):
         DELETE a booking
         """
         booking = Booking.objects.get(pk=pk)
+        booking_serializer = BookingSerializer(booking)
+        for value in booking_serializer.data['parking_spot']:
+            parking_spot  = ParkingSpot.objects.get(pk=value)
+            parking_spot_serializer = ParkingSpotSerializer(parking_spot, data={'status': True})
+            if parking_spot_serializer.is_valid():
+                parking_spot_serializer.save()
         booking.delete()
         return ResponseHandler(status=status.HTTP_200_OK, message='success').api_response()
 
