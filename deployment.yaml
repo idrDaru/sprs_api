@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scproject
+spec:
+  selector:
+    matchLabels:
+      app: sprs_api
+    replicas: 2
+    template:
+      metadata:
+        labels:
+          app: sprs_api
+      spec:
+        containers:
+          - name: sprs_api
+            image: rismi/devopsimage1
+            imagePullPolicy: IfNotPresent
+            ports:
+              - containerPort: 8084
