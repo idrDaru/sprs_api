@@ -13,7 +13,7 @@ spec:
         app: sprs_api
     spec:
       containers:
-        - name: sprs_api
+        - name: sprsapi
           image: rismi/devopsimage1
           imagePullPolicy: IfNotPresent
           ports:
