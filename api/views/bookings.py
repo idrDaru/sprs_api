@@ -62,7 +62,7 @@ class BookingDetail(APIView):
                 parking_spot  = ParkingSpot.objects.get(pk=value)
                 parking_spot_serializer = ParkingSpotSerializer(parking_spot, data={'status': False})
                 if parking_spot_serializer.is_valid():
-                    parking_spot_serializer.save();;
+                    parking_spot_serializer.save()
             return ResponseHandler(status=status.HTTP_200_OK, message='success').api_response()
         return ResponseHandler(status=status.HTTP_400_BAD_REQUEST, message=serializer.errors, data=request.data).api_response()
     def delete(self, request, pk):
