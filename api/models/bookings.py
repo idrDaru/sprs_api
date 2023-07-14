@@ -18,3 +18,5 @@ class Booking(models.Model):
     total_motorcycle = models.IntegerField(null=True)
     total_price = models.FloatField()
     parking_spot = ArrayField(models.UUIDField())
+    is_active = models.BooleanField(default=False)
+    is_expired = models.BooleanField(default=False)

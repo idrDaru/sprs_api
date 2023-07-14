@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+from celery.schedules import crontab
 import environ, os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -35,7 +36,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', '.vercel.app']
+ALLOWED_HOSTS = ['10.100.24.46', '.vercel.app', '127.0.0.1']
 
 
 # Application definition
@@ -141,3 +142,14 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CELERY_BEAT_SCHEDULE = {
+    "CheckIsBookingActive": {
+        "task": "api.tasks.check_is_booking_activated",
+        "schedule": crontab(),
+    },
+    "CheckIsBookingExpired": {
+        "task": "api.tasks.check_is_booking_expired",
+        "schedule": crontab(),
+    },
+}
