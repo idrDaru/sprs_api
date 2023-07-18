@@ -2,9 +2,10 @@ from __future__ import absolute_import, unicode_literals
 
 from celery import shared_task
 from api.models.bookings import Booking
+from api.models.parking_spots import ParkingSpot
+from api.serializers.parking_spots import ParkingSpotSerializer
 from api.serializers.bookings import BookingSerializer
 from django.utils import timezone
-from datetime import datetime
 import pytz
 
 @shared_task
@@ -36,6 +37,11 @@ def check_is_booking_expired():
             if compare_date(value.time_to) and value.is_expired != True:
                 serializer = BookingSerializer(value, data={'is_active': False, 'is_expired': True})
                 if serializer.is_valid():
+                    for value in serializer.data['parking_spot']:
+                        parking_spot = ParkingSpot.objects.get(pk=value)
+                        parking_spot_serializer = ParkingSpotSerializer(parking_spot, data={'status': True})
+                        if parking_spot_serializer.is_valid():
+                            parking_spot_serializer.save()
                     serializer.save()
                     continue
                 return "Error"

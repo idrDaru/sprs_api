@@ -3,9 +3,11 @@ from api.models.parking_spaces import ParkingSpace
 from api.models.parking_providers import ParkingProvider
 from api.models.parking_layouts import ParkingLayout
 from api.models.parking_locations import ParkingLocation
+from api.models.bookings import Booking
 from api.serializers.parking_locations import ParkingLocationSerializer
 from api.serializers.parking_layouts import ParkingLayoutSerializer
 from api.serializers.parking_providers import ParkingProviderSerializer
+from api.serializers.parking_space_booking import ParkingSpaceBookingSerializer
 
 class ParkingProviderRelatedField(serializers.RelatedField):
     def to_representation(self, value):
@@ -49,10 +51,25 @@ class ParkingLocationRelatedField(serializers.RelatedField):
                 'Parking Location Not Found'
             )
 
+class BookingRelatedField(serializers.RelatedField):
+    def to_representation(self, value):
+        serializer = ParkingSpaceBookingSerializer(value)
+        return serializer.data
+    
+    def to_internal_value(self, data):
+        try:
+            booking = Booking.objects.get(id=data['id'])
+            return booking
+        except Booking.DoesNotExist:
+            raise serializers.ValidationError(
+                'Booking Not Found'
+            )
+
 class ParkingSpaceSerializer(serializers.ModelSerializer):
     provider = ParkingProviderRelatedField(queryset=ParkingProvider.objects.all(), required=False)
     parkinglayout_set = ParkingLayoutRelatedField(queryset=ParkingLayout.objects.all(), many=True, required=False)
     parkinglocation_set = ParkingLocationRelatedField(queryset=ParkingLocation.objects.all(), many=True, required=False)
+    booking_set = BookingRelatedField(queryset=Booking.objects.all(), many=True, required=False)
 
     class Meta:
         model = ParkingSpace

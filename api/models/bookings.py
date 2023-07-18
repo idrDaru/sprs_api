@@ -7,6 +7,7 @@ import uuid
 class Booking(models.Model):
     class Meta:
         db_table = 'bookings'
+        ordering = ['-time_from']
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(ParkingUser, on_delete=models.CASCADE)
